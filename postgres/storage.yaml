@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: PersistentVolume # pice of storage in cluster that pods can use
+metadata:
+  name: postgres-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce # only one node can mount it RW at a time
+  hostPath:           # For minikube/Docker driver, maps the PV to a path on host machine (my PC)
+    path: /data/postgres    # this will live on minikube host
+  # In production we would use cloud storage instead (e.g., Azure Disk)
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim # request by a pod for storage
+metadata: # k8s matches this pvc to a suitable PV
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

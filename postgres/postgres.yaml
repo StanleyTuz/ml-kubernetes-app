@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:14
+          env:
+            - name: POSTGRES_USER
+              value: myuser
+            - name: POSTGRES_PASSWORD
+              value: mypassword
+            - name: POSTGRES_DB
+              value: mydb
+          ports:
+            - containerPort: 5432
+          volumeMounts: 
+            - name: postgres-storage # links to a volume defined in the pod spec (below)
+              mountPath: /var/lib/postgresql/data # path inside the container where the volume will appear
+      volumes: # this is the pod spec
+        - name: postgres-storage # matches the name in volumeMounts
+          persistentVolumeClaim:  
+            claimName: postgres-pvc # tells k8s to use this PVC. A request for durable storage. This is in storage.yaml

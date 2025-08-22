@@ -17,3 +17,12 @@ curl -X POST http://localhost:8000/predict \
     -H "Content-Type: application/json" \
     -d '{"prediction_request": "hello there!"}'
 ```
+
+
+# To use in minikube
+
+Minikube has its own Docker daemon, so we need to switch to this and build the container there.
+
+```bash
+eval $(minikube -p minikube docker-env)
+```
